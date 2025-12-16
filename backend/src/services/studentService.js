@@ -19,7 +19,16 @@ const justificationSchema = z.object({
 
 export async function submitMood(body, studentId) {
   const data = moodSchema.parse(body);
-  await createMood({ studentId, emoji: data.emoji, note: data.note });
+  try {
+    await createMood({ studentId, emoji: data.emoji, note: data.note });
+  } catch (e) {
+    if (e?.code === 'ER_DUP_ENTRY') {
+      const err = new Error('Ya registraste tu estado de ánimo hoy');
+      err.status = 400;
+      throw err;
+    }
+    throw e;
+  }
   return { ok: true };
 }
 

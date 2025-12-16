@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../data/api_client.dart';
 import '../domain/tutor_repository.dart';
 import '../../auth/providers/session_provider.dart';
@@ -57,7 +58,7 @@ class _TutorJustificationsScreenState extends ConsumerState<TutorJustificationsS
                                 ),
                                 const SizedBox(width: 8),
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () => _openUrl(item['evidenceUrl'] as String),
                                   child: const Text('Descargar'),
                                 )
                               ],
@@ -100,5 +101,12 @@ class _TutorJustificationsScreenState extends ConsumerState<TutorJustificationsS
     final repo = TutorRepository(ApiClient(token: token));
     await repo.updateJustification(id, status);
     await _load();
+  }
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }

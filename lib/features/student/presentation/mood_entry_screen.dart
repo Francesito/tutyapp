@@ -82,7 +82,7 @@ class _MoodEntryScreenState extends ConsumerState<MoodEntryScreen> {
       await repo.submitMood(_selected!, _note.text);
       setState(() => _status = 'Ánimo registrado');
     } catch (e) {
-      setState(() => _status = 'No se pudo guardar');
+      setState(() => _status = e.toString().replaceFirst('Exception: ', ''));
     }
   }
 }

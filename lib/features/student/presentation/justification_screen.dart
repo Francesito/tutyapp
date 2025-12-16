@@ -101,7 +101,7 @@ class _JustificationScreenState extends ConsumerState<JustificationScreen> {
       await repo.submitJustification(_reason.text, url);
       setState(() => _status = 'Enviado');
     } catch (e) {
-      setState(() => _status = 'Límite alcanzado o error');
+      setState(() => _status = e.toString().replaceFirst('Exception: ', ''));
     } finally {
       setState(() => _uploading = false);
     }
