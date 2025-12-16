@@ -31,13 +31,17 @@ class StudentRepository {
     });
   }
 
-  Future<List<Map<String, dynamic>>> fetchChat() async {
-    final res = await _api.get('/chat');
+  Future<List<Map<String, dynamic>>> fetchChat({String? groupCode}) async {
+    final path = groupCode != null ? '/chat?groupCode=$groupCode' : '/chat';
+    final res = await _api.get(path);
     return (res['items'] as List<dynamic>).cast<Map<String, dynamic>>();
   }
 
-  Future<void> sendChatMessage(String message) async {
-    await _api.post('/chat', {'message': message});
+  Future<void> sendChatMessage(String message, {String? groupCode}) async {
+    await _api.post('/chat', {
+      'message': message,
+      if (groupCode != null) 'groupCode': groupCode,
+    });
   }
 
   Future<List<MoodEntry>> fetchMoodHistory() async {

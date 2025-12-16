@@ -19,6 +19,7 @@ import 'features/tutor/presentation/tutor_panel_screen.dart';
 import 'features/tutor/presentation/tutor_reports_screen.dart';
 import 'features/tutor/presentation/tutor_student_detail_screen.dart';
 import 'features/student/presentation/chat_screen.dart';
+import 'features/tutor/presentation/tutor_chat_screen.dart';
 
 class TutorTrackApp extends ConsumerWidget {
   const TutorTrackApp({super.key});
@@ -117,7 +118,7 @@ class TutorTrackApp extends ConsumerWidget {
             ),
             GoRoute(
               path: 'chat',
-              builder: (context, state) => const ChatScreen(),
+              builder: (context, state) => const TutorChatScreen(),
             ),
           ],
         ),
