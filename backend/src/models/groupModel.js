@@ -35,7 +35,7 @@ export async function studentGroupForTerm(studentId, term) {
 
 export async function groupSummaryForTutor(tutorId) {
   const [rows] = await pool.query(
-    'SELECT g.id, g.code, g.term, COUNT(gm.student_id) as students FROM groups g LEFT JOIN group_members gm ON gm.group_id = g.id WHERE g.tutor_id = ? GROUP BY g.id',
+    'SELECT g.id, g.code, g.term, COUNT(gm.student_id) as students FROM `groups` g LEFT JOIN group_members gm ON gm.group_id = g.id WHERE g.tutor_id = ? GROUP BY g.id',
     [tutorId]
   );
   return rows;

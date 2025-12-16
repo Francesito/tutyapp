@@ -13,7 +13,7 @@ export async function fetchAlerts(tutorId) {
 export async function tutorPanel(tutorId) {
   const [rows] = await pool.query(
     `SELECT g.code, COUNT(gm.student_id) as students
-     FROM groups g LEFT JOIN group_members gm ON gm.group_id = g.id
+     FROM \`groups\` g LEFT JOIN group_members gm ON gm.group_id = g.id
      WHERE g.tutor_id = ? GROUP BY g.id LIMIT 1`,
     [tutorId]
   );

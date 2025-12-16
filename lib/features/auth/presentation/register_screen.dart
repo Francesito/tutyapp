@@ -24,69 +24,82 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Registro')), 
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 460),
-          child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            elevation: 6,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(labelText: 'Nombre'),
-                  ),
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Correo'),
-                  ),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(labelText: 'Contraseña'),
-                    obscureText: true,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RadioListTile<UserRole>(
-                          title: const Text('Alumno'),
-                          value: UserRole.student,
-                          groupValue: _role,
-                          onChanged: (v) => setState(() => _role = v!),
-                        ),
-                      ),
-                      Expanded(
-                        child: RadioListTile<UserRole>(
-                          title: const Text('Tutor'),
-                          value: UserRole.tutor,
-                          groupValue: _role,
-                          onChanged: (v) => setState(() => _role = v!),
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (_error != null)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child:
-                          Text(_error!, style: const TextStyle(color: Colors.red)),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1565C0), Color(0xFF90CAF9)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 480),
+            child: Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              elevation: 10,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Crear cuenta',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.primary)),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(labelText: 'Nombre', filled: true),
                     ),
-                  FilledButton(
-                    onPressed: _loading ? null : _onRegister,
-                    child: _loading
-                        ? const CircularProgressIndicator.adaptive()
-                        : const Text('Crear cuenta'),
-                  ),
-                  TextButton(
-                    onPressed: () => context.go('/login'),
-                    child: const Text('¿Ya tienes cuenta? Inicia sesión'),
-                  )
-                ],
+                    TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(labelText: 'Correo', filled: true),
+                    ),
+                    TextField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(labelText: 'Contraseña', filled: true),
+                      obscureText: true,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<UserRole>(
+                            title: const Text('Alumno'),
+                            value: UserRole.student,
+                            groupValue: _role,
+                            onChanged: (v) => setState(() => _role = v!),
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<UserRole>(
+                            title: const Text('Tutor'),
+                            value: UserRole.tutor,
+                            groupValue: _role,
+                            onChanged: (v) => setState(() => _role = v!),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (_error != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child:
+                            Text(_error!, style: const TextStyle(color: Colors.red)),
+                      ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: _loading ? null : _onRegister,
+                        child: _loading
+                            ? const CircularProgressIndicator.adaptive()
+                            : const Text('Crear cuenta'),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => context.go('/login'),
+                      child: const Text('¿Ya tienes cuenta? Inicia sesión'),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

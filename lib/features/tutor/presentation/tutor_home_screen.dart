@@ -22,44 +22,53 @@ class TutorHomeScreen extends ConsumerWidget {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            _card(
-              context,
-              title: 'Panel',
-              subtitle: 'Ánimo, alertas y resumen',
-              onTap: () => context.go('/tutor/panel'),
-            ),
-            _card(
-              context,
-              title: 'Crear grupo',
-              subtitle: 'Código único por cuatrimestre',
-              onTap: () => context.go('/tutor/groups/create'),
-            ),
-            _card(
-              context,
-              title: 'Justificantes',
-              subtitle: 'Aprobar / rechazar',
-              onTap: () => context.go('/tutor/justifications'),
-            ),
-            _card(
-              context,
-              title: 'Reportes',
-              subtitle: 'Exportar PDF/Excel',
-              onTap: () => context.go('/tutor/reports'),
-            ),
-            if (session != null)
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0D47A1), Color(0xFF82B1FF)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Wrap(
+            spacing: 14,
+            runSpacing: 14,
+            children: [
               _card(
                 context,
-                title: 'Perfil',
-                subtitle: session.email,
-                onTap: () {},
-              )
-          ],
+                title: 'Panel',
+                subtitle: 'Ánimo, alertas y resumen',
+                onTap: () => context.go('/tutor/panel'),
+              ),
+              _card(
+                context,
+                title: 'Crear grupo',
+                subtitle: 'Código único por cuatrimestre',
+                onTap: () => context.go('/tutor/groups/create'),
+              ),
+              _card(
+                context,
+                title: 'Justificantes',
+                subtitle: 'Aprobar / rechazar',
+                onTap: () => context.go('/tutor/justifications'),
+              ),
+              _card(
+                context,
+                title: 'Reportes',
+                subtitle: 'Exportar PDF/Excel',
+                onTap: () => context.go('/tutor/reports'),
+              ),
+              if (session != null)
+                _card(
+                  context,
+                  title: 'Perfil',
+                  subtitle: session.email,
+                  onTap: () {},
+                )
+            ],
+          ),
         ),
       ),
     );
@@ -72,16 +81,21 @@ class TutorHomeScreen extends ConsumerWidget {
     return SizedBox(
       width: 200,
       child: Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        elevation: 8,
         child: InkWell(
+          borderRadius: BorderRadius.circular(16),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold)),
+                        fontSize: 17, fontWeight: FontWeight.bold, color: AppColors.primary)),
+                const SizedBox(height: 4),
                 Text(subtitle),
               ],
             ),

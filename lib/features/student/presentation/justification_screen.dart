@@ -24,44 +24,62 @@ class _JustificationScreenState extends ConsumerState<JustificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Solicitar justificante')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _reason,
-              decoration: const InputDecoration(labelText: 'Motivo'),
-            ),
-            const SizedBox(height: 12),
-            const Text('Evidencia (JPG, máx 2MB):'),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    _pickedFile?.path.split('/').last ?? 'Sin archivo',
-                    overflow: TextOverflow.ellipsis,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1565C0), Color(0xFF90CAF9)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Card(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            elevation: 8,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    controller: _reason,
+                    decoration: const InputDecoration(labelText: 'Motivo', filled: true),
                   ),
-                ),
-                TextButton.icon(
-                  onPressed: _pickFile,
-                  icon: const Icon(Icons.attach_file),
-                  label: const Text('Adjuntar'),
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  const Text('Evidencia (JPG, máx 2MB):'),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _pickedFile?.path.split('/').last ?? 'Sin archivo',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      TextButton.icon(
+                        onPressed: _pickFile,
+                        icon: const Icon(Icons.attach_file),
+                        label: const Text('Adjuntar'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    onPressed: _uploading ? null : _submit,
+                    icon: const Icon(Icons.send),
+                    label: const Text('Enviar (máx 2 por cuatrimestre)'),
+                  ),
+                  if (_status.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(_status),
+                    )
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
-            FilledButton.icon(
-              onPressed: _uploading ? null : _submit,
-              icon: const Icon(Icons.send),
-              label: const Text('Enviar (máx 2 por cuatrimestre)'),
-            ),
-            if (_status.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(_status),
-              )
-          ],
+          ),
         ),
       ),
     );

@@ -22,45 +22,58 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 420),
-          child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            elevation: 6,
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(AppText.appName,
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Correo'),
-                  ),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(labelText: 'Contraseña'),
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 12),
-                  if (_error != null)
-                    Text(_error!, style: const TextStyle(color: Colors.red)),
-                  const SizedBox(height: 8),
-                  FilledButton(
-                    onPressed: _loading ? null : _onLogin,
-                    child: _loading
-                        ? const CircularProgressIndicator.adaptive()
-                        : const Text('Iniciar sesión'),
-                  ),
-                  TextButton(
-                    onPressed: () => context.go('/register'),
-                    child: const Text('Crear cuenta'),
-                  )
-                ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF0D47A1), Color(0xFF42A5F5)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 420),
+            child: Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              elevation: 10,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(AppText.appName,
+                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppColors.primary)),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(labelText: 'Correo', filled: true),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(labelText: 'Contraseña', filled: true),
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 12),
+                    if (_error != null)
+                      Text(_error!, style: const TextStyle(color: Colors.red)),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: _loading ? null : _onLogin,
+                        child: _loading
+                            ? const CircularProgressIndicator.adaptive()
+                            : const Text('Iniciar sesión'),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => context.go('/register'),
+                      child: const Text('Crear cuenta'),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
