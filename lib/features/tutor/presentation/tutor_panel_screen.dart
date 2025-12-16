@@ -17,6 +17,7 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
   bool loading = true;
   List<AlertItem> alerts = [];
   Map<String, dynamic> summary = {};
+  List<Map<String, dynamic>> groups = [];
 
   @override
   void initState() {
@@ -61,6 +62,25 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  Card(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    elevation: 8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Grupos y alumnos',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.primary)),
+                          const SizedBox(height: 8),
+                          ..._buildGroupList(),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   const Text('Alertas automáticas',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
                   ...alerts.map((a) => Card(
@@ -83,10 +103,39 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
     final repo = TutorRepository(ApiClient(token: token));
     final alertData = await repo.fetchAlerts();
     final panel = await repo.fetchPanel();
+    final grp = await repo.fetchGroups();
     setState(() {
       alerts = alertData;
       summary = panel;
+      groups = grp;
       loading = false;
     });
+  }
+
+  List<Widget> _buildGroupList() {
+    if (groups.isEmpty) {
+      return [const Text('Sin grupos aún')];
+    }
+    final grouped = <String, List<Map<String, dynamic>>>{};
+    for (final row in groups) {
+      grouped.putIfAbsent(row['code'] as String, () => []).add(row);
+    }
+    return grouped.entries.map((entry) {
+      final students = entry.value.where((e) => e['studentId'] != null).toList();
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${entry.key} (${entry.value.first['term']})',
+                style: const TextStyle(fontWeight: FontWeight.w600)),
+            if (students.isEmpty)
+              const Text('Sin alumnos aún')
+            else
+              ...students.map((s) => Text('- ${s['name'] ?? s['email']}')),
+          ],
+        ),
+      );
+    }).toList();
   }
 }

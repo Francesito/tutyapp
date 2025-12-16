@@ -23,4 +23,14 @@ class TutorRepository {
   Future<Map<String, dynamic>> fetchPanel() async {
     return _api.get('/tutor/panel');
   }
+
+  Future<List<Map<String, dynamic>>> fetchGroups() async {
+    final res = await _api.get('/tutor/groups');
+    return (res['items'] as List<dynamic>).cast<Map<String, dynamic>>();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchTutorJustifications() async {
+    final res = await _api.get('/tutor/justifications');
+    return (res['items'] as List<dynamic>).cast<Map<String, dynamic>>();
+  }
 }
