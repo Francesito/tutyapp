@@ -37,7 +37,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFF4F7FF), Color(0xFFE8F0FF)],
+            colors: [Color(0xFFFDF0D5), Color(0xFFE3F2FD)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -48,16 +48,16 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
             Card(
               color: AppColors.card,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              elevation: 3,
+              elevation: 4,
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hola, ${session?.name ?? session?.email ?? ''}',
+                    Text('👋 Hola, ${session?.name ?? session?.email ?? ''}',
                         style: const TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     const Text('Código de grupo'),
                     const SizedBox(height: 6),
                     Row(
@@ -93,29 +93,34 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
               runSpacing: 12,
               children: [
                 _FeatureCard(
-                  title: 'Ánimo diario',
+                  title: 'Ánimo diario 😊',
                   icon: Icons.emoji_emotions,
                   onTap: () => context.go('/home/mood'),
+                  color: const Color(0xFFFFD54F),
                 ),
                 _FeatureCard(
-                  title: 'Percepciones',
+                  title: 'Percepciones 📚',
                   icon: Icons.school,
                   onTap: () => context.go('/home/perception'),
+                  color: const Color(0xFF80DEEA),
                 ),
                 _FeatureCard(
-                  title: 'Justificantes',
+                  title: 'Justificantes 📝',
                   icon: Icons.description,
                   onTap: () => context.go('/home/justifications'),
+                  color: const Color(0xFFA5D6A7),
                 ),
                 _FeatureCard(
-                  title: 'Historial',
+                  title: 'Historial 📜',
                   icon: Icons.history,
                   onTap: () => context.go('/home/history'),
+                  color: const Color(0xFFCE93D8),
                 ),
                 _FeatureCard(
-                  title: 'Mensajes',
+                  title: 'Mensajes 💬',
                   icon: Icons.chat,
                   onTap: () => context.go('/home/chat'),
+                  color: const Color(0xFF90CAF9),
                 ),
               ],
             )
@@ -143,28 +148,40 @@ class _FeatureCard extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.onTap,
+    required this.color,
   });
 
   final String title;
   final IconData icon;
   final VoidCallback onTap;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 160,
-      child: Card(
-        child: InkWell(
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 28, color: AppColors.primary),
-                const SizedBox(height: 8),
-                Text(title, textAlign: TextAlign.center),
-              ],
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        child: Card(
+          color: color,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          elevation: 6,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(14),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 30, color: Colors.black87),
+                  const SizedBox(height: 8),
+                  Text(title,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
+                ],
+              ),
             ),
           ),
         ),

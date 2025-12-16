@@ -16,6 +16,36 @@ dotenv.config();
 
 export const tutorRouter = express.Router();
 
+// Reportes accesibles con token via query (para descargar en navegador)
+tutorRouter.get(
+  '/reports/pdf',
+  authFromHeaderOrQuery,
+  asyncHandler(async (req, res) => {
+    const summary = await tutorPanel(req.user.id);
+    const doc = new PDFDocument();
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="reporte.pdf"');
+    doc.pipe(res);
+    doc.fontSize(18).text('Reporte Tuty');
+    doc.moveDown();
+    doc.fontSize(12).text(`Grupo: ${summary.code ?? 'N/A'}`);
+    doc.text(`Estudiantes: ${summary.students ?? 0}`);
+    doc.end();
+  })
+);
+
+tutorRouter.get(
+  '/reports/excel',
+  authFromHeaderOrQuery,
+  asyncHandler(async (req, res) => {
+    const summary = await tutorPanel(req.user.id);
+    const csv = 'grupo,estudiantes\n' + `${summary.code ?? ''},${summary.students ?? 0}\n`;
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="reporte.csv"');
+    res.send(csv);
+  })
+);
+
 tutorRouter.use(requireAuth, requireRole('tutor'));
 
 tutorRouter.get(
@@ -74,32 +104,3 @@ function authFromHeaderOrQuery(req, res, next) {
     return res.status(401).json({ message: 'Invalid token' });
   }
 }
-
-tutorRouter.get(
-  '/reports/pdf',
-  authFromHeaderOrQuery,
-  asyncHandler(async (req, res) => {
-    const summary = await tutorPanel(req.user.id);
-    const doc = new PDFDocument();
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename="reporte.pdf"');
-    doc.pipe(res);
-    doc.fontSize(18).text('Reporte Tuty');
-    doc.moveDown();
-    doc.fontSize(12).text(`Grupo: ${summary.code ?? 'N/A'}`);
-    doc.text(`Estudiantes: ${summary.students ?? 0}`);
-    doc.end();
-  })
-);
-
-tutorRouter.get(
-  '/reports/excel',
-  authFromHeaderOrQuery,
-  asyncHandler(async (req, res) => {
-    const summary = await tutorPanel(req.user.id);
-    const csv = 'grupo,estudiantes\n' + `${summary.code ?? ''},${summary.students ?? 0}\n`;
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="reporte.csv"');
-    res.send(csv);
-  })
-);

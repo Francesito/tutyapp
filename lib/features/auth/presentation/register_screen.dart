@@ -43,7 +43,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text('Crear cuenta',
+                    const Text('🚀 Crear cuenta',
                         style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.primary)),
                     const SizedBox(height: 12),
                     TextField(

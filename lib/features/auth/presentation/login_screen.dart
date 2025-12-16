@@ -42,6 +42,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    const Text('👋 Bienvenido a Tuty',
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.primary)),
+                    const SizedBox(height: 6),
                     const Text(AppText.appName,
                         style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppColors.primary)),
                     const SizedBox(height: 16),
