@@ -65,6 +65,13 @@ class TutorHomeScreen extends ConsumerWidget {
                 onTap: () => context.go('/tutor/reports'),
                 color: const Color(0xFFCE93D8),
               ),
+              _card(
+                context,
+                title: 'Chat grupal 💬',
+                subtitle: 'Habla con tu grupo',
+                onTap: () => context.go('/tutor/chat'),
+                color: const Color(0xFFFFF59D),
+              ),
               if (session != null)
                 _card(
                   context,

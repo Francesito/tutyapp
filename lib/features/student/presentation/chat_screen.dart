@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../auth/providers/session_provider.dart';
+import '../../../data/api_client.dart';
+import '../domain/student_repository.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({super.key, this.tutorGroupCode});
+
+  final String? tutorGroupCode;
 
   @override
   ConsumerState<ChatScreen> createState() => _ChatScreenState();
@@ -11,10 +15,8 @@ class ChatScreen extends ConsumerStatefulWidget {
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _messageCtrl = TextEditingController();
-  final List<Map<String, String>> _messages = [
-    {'from': 'Tutor', 'text': 'Bienvenidos al grupo 👋'},
-    {'from': 'Alumno', 'text': 'Hola, profe'},
-  ];
+  List<Map<String, dynamic>> _messages = [];
+  bool loading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
                   final msg = _messages[index];
-                  final isMine = msg['from'] == (session?.name ?? session?.email);
+                  final isMine = msg['email'] == session?.email;
                   return Align(
                     alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
@@ -51,9 +53,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         crossAxisAlignment:
                             isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                         children: [
-                          Text(msg['from'] ?? '',
+                          Text(msg['name'] ?? msg['email'] ?? '',
                               style: const TextStyle(fontWeight: FontWeight.bold)),
-                          Text(msg['text'] ?? ''),
+                          Text(msg['message'] ?? ''),
                         ],
                       ),
                     ),
@@ -94,9 +96,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final text = _messageCtrl.text.trim();
     if (text.isEmpty) return;
     final session = ref.read(sessionProvider).session;
+    _messageCtrl.clear();
+    final token = session?.token;
+    final repo = StudentRepository(ApiClient(token: token));
+    repo.sendChatMessage(text);
+    _load();
+  }
+
+  Future<void> _load() async {
+    final token = ref.read(sessionProvider).session?.token;
+    final repo = StudentRepository(ApiClient(token: token));
+    final data = await repo.fetchChat();
     setState(() {
-      _messages.add({'from': session?.name ?? session?.email ?? 'Yo', 'text': text});
-      _messageCtrl.clear();
+      _messages = data;
+      loading = false;
     });
   }
 }

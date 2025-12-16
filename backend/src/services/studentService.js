@@ -18,6 +18,12 @@ const justificationSchema = z.object({
 });
 
 export async function submitMood(body, studentId) {
+  const currentGroup = await studentGroupForTerm(studentId, null);
+  if (!currentGroup) {
+    const err = new Error('Únete a un grupo para continuar');
+    err.status = 400;
+    throw err;
+  }
   const data = moodSchema.parse(body);
   try {
     await createMood({ studentId, emoji: data.emoji, note: data.note });
@@ -33,6 +39,12 @@ export async function submitMood(body, studentId) {
 }
 
 export async function submitPerception(body, studentId) {
+  const currentGroup = await studentGroupForTerm(studentId, null);
+  if (!currentGroup) {
+    const err = new Error('Únete a un grupo para continuar');
+    err.status = 400;
+    throw err;
+  }
   const data = perceptionSchema.parse(body);
   await createPerception({
     studentId,
@@ -43,8 +55,13 @@ export async function submitPerception(body, studentId) {
 }
 
 export async function submitJustification(body, studentId) {
-  const data = justificationSchema.parse(body);
   const currentGroup = await studentGroupForTerm(studentId, null);
+  if (!currentGroup) {
+    const err = new Error('Únete a un grupo para continuar');
+    err.status = 400;
+    throw err;
+  }
+  const data = justificationSchema.parse(body);
   const term = currentGroup?.term || 'default';
   const count = await countJustificationsForTerm(studentId, term);
   if (count >= 2) throw new Error('Límite de justificantes alcanzado');

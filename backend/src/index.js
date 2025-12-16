@@ -7,6 +7,7 @@ import { groupRouter } from './routes/groups.js';
 import { studentRouter } from './routes/students.js';
 import { tutorRouter } from './routes/tutors.js';
 import { uploadRouter } from './routes/uploads.js';
+import { chatRouter } from './routes/chat.js';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use('/groups', groupRouter);
 app.use('/students', studentRouter);
 app.use('/tutor', tutorRouter);
 app.use('/uploads', uploadRouter);
+app.use('/chat', chatRouter);
 
 // basic error handler
 app.use((err, req, res, _next) => {

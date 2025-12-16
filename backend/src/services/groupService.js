@@ -3,6 +3,7 @@ import {
   addStudentToGroup,
   createGroup,
   findGroupByCode,
+  removeStudentFromGroups,
   groupSummaryForTutor,
   studentGroupForTerm,
 } from '../models/groupModel.js';
@@ -30,6 +31,11 @@ export async function handleJoinGroup(body, studentId) {
   if (existing) throw new Error('Alumno ya está en un grupo para el mismo término');
   await addStudentToGroup({ studentId, groupId: group.id });
   return { groupId: group.id };
+}
+
+export async function handleLeaveGroup(studentId) {
+  await removeStudentFromGroups(studentId);
+  return { ok: true };
 }
 
 export async function tutorGroups(tutorId) {

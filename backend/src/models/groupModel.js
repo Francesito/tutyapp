@@ -20,6 +20,10 @@ export async function addStudentToGroup({ studentId, groupId }) {
   );
 }
 
+export async function removeStudentFromGroups(studentId) {
+  await pool.query('DELETE FROM group_members WHERE student_id = ?', [studentId]);
+}
+
 export async function studentGroupForTerm(studentId, term) {
   let sql =
     'SELECT g.* FROM group_members gm JOIN `groups` g ON gm.group_id = g.id WHERE gm.student_id = ?';

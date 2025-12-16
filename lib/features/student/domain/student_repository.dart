@@ -31,6 +31,15 @@ class StudentRepository {
     });
   }
 
+  Future<List<Map<String, dynamic>>> fetchChat() async {
+    final res = await _api.get('/chat');
+    return (res['items'] as List<dynamic>).cast<Map<String, dynamic>>();
+  }
+
+  Future<void> sendChatMessage(String message) async {
+    await _api.post('/chat', {'message': message});
+  }
+
   Future<List<MoodEntry>> fetchMoodHistory() async {
     final res = await _api.get('/students/mood');
     final data = (res['items'] as List<dynamic>)
