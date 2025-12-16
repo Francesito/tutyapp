@@ -18,6 +18,7 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
   List<AlertItem> alerts = [];
   Map<String, dynamic> summary = {};
   List<Map<String, dynamic>> groups = [];
+  List<Map<String, dynamic>> justifications = [];
 
   @override
   void initState() {
@@ -81,6 +82,16 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  Card(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    elevation: 8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: _buildJustificationChart(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   const Text('Alertas automáticas',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
                   ...alerts.map((a) => Card(
@@ -104,10 +115,12 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
     final alertData = await repo.fetchAlerts();
     final panel = await repo.fetchPanel();
     final grp = await repo.fetchGroups();
+    final justs = await repo.fetchTutorJustifications();
     setState(() {
       alerts = alertData;
       summary = panel;
       groups = grp;
+      justifications = justs;
       loading = false;
     });
   }
@@ -137,5 +150,54 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
         ),
       );
     }).toList();
+  }
+
+  Widget _buildJustificationChart() {
+    final counts = {'pendiente': 0, 'aprobado': 0, 'rechazado': 0};
+    for (final j in justifications) {
+      final status = (j['status'] as String?) ?? 'pendiente';
+      if (counts.containsKey(status)) counts[status] = counts[status]! + 1;
+    }
+    final total = counts.values.fold<int>(0, (p, e) => p + e);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Justificantes',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
+        const SizedBox(height: 6),
+        Row(
+          children: counts.entries.map((e) {
+            final pct = total == 0 ? 0 : (e.value / total * 100).round();
+            Color color;
+            switch (e.key) {
+              case 'aprobado':
+                color = Colors.green.shade400;
+                break;
+              case 'rechazado':
+                color = Colors.red.shade300;
+                break;
+              default:
+                color = Colors.orange.shade300;
+            }
+            return Expanded(
+              child: Column(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text('${e.key}: ${e.value} (${pct}%)'),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
   }
 }

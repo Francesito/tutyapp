@@ -19,6 +19,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   bool loading = true;
 
   @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final session = ref.watch(sessionProvider).session;
     return Scaffold(
@@ -99,14 +105,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _messageCtrl.clear();
     final token = session?.token;
     final repo = StudentRepository(ApiClient(token: token));
-    repo.sendChatMessage(text);
+    repo.sendChatMessage(text, groupCode: widget.tutorGroupCode);
     _load();
   }
 
   Future<void> _load() async {
     final token = ref.read(sessionProvider).session?.token;
     final repo = StudentRepository(ApiClient(token: token));
-    final data = await repo.fetchChat();
+    final data = await repo.fetchChat(groupCode: widget.tutorGroupCode);
     setState(() {
       _messages = data;
       loading = false;

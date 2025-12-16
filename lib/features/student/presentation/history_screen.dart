@@ -15,6 +15,7 @@ class HistoryScreen extends ConsumerStatefulWidget {
 class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   List<MoodEntry> moods = [];
   List<PerceptionEntry> perceptions = [];
+  List<JustificationRequest> justifications = [];
   bool loading = true;
 
   @override
@@ -45,6 +46,14 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                       title: Text(e.subject),
                       subtitle: Text(e.perception),
                     )),
+                const SizedBox(height: 12),
+                const Text('Justificantes',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                ...justifications.map((j) => ListTile(
+                      title: Text(j.reason),
+                      subtitle: Text('Estado: ${j.status}'),
+                      trailing: const Icon(Icons.receipt_long),
+                    )),
               ],
             ),
     );
@@ -56,9 +65,11 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     try {
       final m = await repo.fetchMoodHistory();
       final p = await repo.fetchPerceptions();
+      final j = await repo.fetchJustifications();
       setState(() {
         moods = m;
         perceptions = p;
+        justifications = j;
       });
     } finally {
       setState(() => loading = false);

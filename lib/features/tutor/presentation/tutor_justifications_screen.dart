@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../data/api_client.dart';
 import '../domain/tutor_repository.dart';
@@ -42,28 +44,28 @@ class _TutorJustificationsScreenState extends ConsumerState<TutorJustificationsS
                       children: [
                         Text('Grupo: ${item['groupCode'] ?? 'N/A'}'),
                         Text('Estado: ${item['status']}'),
-                        if (item['evidenceUrl'] != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 60,
-                                  height: 60,
-                                  child: Image.network(
-                                    item['evidenceUrl'],
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                                if (item['evidenceUrl'] != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 60,
+                                          height: 60,
+                                          child: Image.network(
+                                            item['evidenceUrl'],
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        TextButton(
+                                          onPressed: () => _downloadEvidence(item['evidenceUrl'] as String),
+                                          child: const Text('Descargar'),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 8),
-                                TextButton(
-                                  onPressed: () => _openUrl(item['evidenceUrl'] as String),
-                                  child: const Text('Descargar'),
-                                )
-                              ],
-                            ),
-                          ),
                       ],
                     ),
                     trailing: Wrap(
@@ -107,6 +109,26 @@ class _TutorJustificationsScreenState extends ConsumerState<TutorJustificationsS
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _downloadEvidence(String url) async {
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final fileName = url.split('/').last;
+      final savePath = '${dir.path}/$fileName';
+      await Dio().download(url, savePath);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Descargado en $savePath')),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No se pudo descargar')),
+        );
+      }
     }
   }
 }
