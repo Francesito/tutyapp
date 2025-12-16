@@ -19,6 +19,7 @@ class _JustificationScreenState extends ConsumerState<JustificationScreen> {
   String _status = '';
   File? _pickedFile;
   bool _uploading = false;
+  bool _isError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,10 @@ class _JustificationScreenState extends ConsumerState<JustificationScreen> {
                   if (_status.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
-                      child: Text(_status),
+                      child: Text(
+                        _status,
+                        style: TextStyle(color: _isError ? Colors.red : Colors.green),
+                      ),
                     )
                 ],
               ),
@@ -94,14 +98,21 @@ class _JustificationScreenState extends ConsumerState<JustificationScreen> {
       setState(() {
         _uploading = true;
         _status = 'Subiendo evidencia...';
+        _isError = false;
       });
       final token = ref.read(sessionProvider).session?.token;
       final repo = StudentRepository(ApiClient(token: token));
       final url = await repo.uploadEvidence(_pickedFile!);
       await repo.submitJustification(_reason.text, url);
-      setState(() => _status = 'Enviado');
+      setState(() {
+        _status = 'Enviado';
+        _isError = false;
+      });
     } catch (e) {
-      setState(() => _status = e.toString().replaceFirst('Exception: ', ''));
+      setState(() {
+        _status = e.toString().replaceFirst('Exception: ', '');
+        _isError = true;
+      });
     } finally {
       setState(() => _uploading = false);
     }

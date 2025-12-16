@@ -16,6 +16,7 @@ class _MoodEntryScreenState extends ConsumerState<MoodEntryScreen> {
   String? _selected;
   final _note = TextEditingController();
   String _status = '';
+  bool _isError = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,10 @@ class _MoodEntryScreenState extends ConsumerState<MoodEntryScreen> {
               if (_status.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: Text(_status),
+                  child: Text(
+                    _status,
+                    style: TextStyle(color: _isError ? Colors.red : Colors.green),
+                  ),
                 )
             ],
           ),
@@ -80,9 +84,15 @@ class _MoodEntryScreenState extends ConsumerState<MoodEntryScreen> {
       final token = ref.read(sessionProvider).session?.token;
       final repo = StudentRepository(ApiClient(token: token));
       await repo.submitMood(_selected!, _note.text);
-      setState(() => _status = 'Ánimo registrado');
+      setState(() {
+        _status = 'Ánimo registrado';
+        _isError = false;
+      });
     } catch (e) {
-      setState(() => _status = e.toString().replaceFirst('Exception: ', ''));
+      setState(() {
+        _status = e.toString().replaceFirst('Exception: ', '');
+        _isError = true;
+      });
     }
   }
 }

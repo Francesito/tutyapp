@@ -56,11 +56,8 @@ class StudentRepository {
   Future<String> uploadEvidence(File file) async {
     final uri = Uri.parse('$apiBaseUrl/uploads/justification-image');
     final request = http.MultipartRequest('POST', uri);
-    if (_api is ApiClient) {
-      final tokenField = (_api as dynamic)._token;
-      if (tokenField != null) {
-        request.headers['Authorization'] = 'Bearer $tokenField';
-      }
+    if (_api.token != null) {
+      request.headers['Authorization'] = 'Bearer ${_api.token}';
     }
     request.files.add(await http.MultipartFile.fromPath('file', file.path));
     final streamed = await request.send();
