@@ -33,4 +33,7 @@ class TutorRepository {
     final res = await _api.get('/tutor/justifications');
     return (res['items'] as List<dynamic>).cast<Map<String, dynamic>>();
   }
+
+  Uri reportPdfUrl() => Uri.parse('$apiBaseUrl/tutor/reports/pdf?token=${_api.token}');
+  Uri reportExcelUrl() => Uri.parse('$apiBaseUrl/tutor/reports/excel?token=${_api.token}');
 }

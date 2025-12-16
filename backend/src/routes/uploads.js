@@ -25,8 +25,7 @@ const upload = multer({
   limits: { fileSize: 2 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
-    const isJpeg = file.mimetype == 'image/jpeg' || file.mimetype == 'image/jpg';
-    if (!isJpeg || (ext !== '.jpg' && ext !== '.jpeg')) {
+    if (ext !== '.jpg' && ext !== '.jpeg') {
       return cb(new Error('Solo se permiten JPG (<2MB)'));
     }
     cb(null, true);
