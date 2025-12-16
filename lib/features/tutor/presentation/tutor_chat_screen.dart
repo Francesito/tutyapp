@@ -43,7 +43,7 @@ class _TutorChatScreenState extends ConsumerState<TutorChatScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: DropdownButtonFormField<String>(
-                value: _selectedGroup,
+                value: groups.any((g) => g['code'] == _selectedGroup) ? _selectedGroup : null,
                 hint: const Text('Selecciona grupo'),
                 items: groups
                     .map((g) => DropdownMenuItem<String>(
@@ -125,15 +125,21 @@ class _TutorChatScreenState extends ConsumerState<TutorChatScreen> {
     final token = ref.read(sessionProvider).session?.token;
     final tutorRepo = TutorRepository(ApiClient(token: token));
     final data = await tutorRepo.fetchGroups();
+    // Agrupa por código para evitar duplicados por alumno
+    final unique = <String, Map<String, dynamic>>{};
+    for (final g in data) {
+      unique[g['code'] as String] = g;
+    }
+    final list = unique.values.toList();
     setState(() {
-      groups = data;
-      _selectedGroup = data.isNotEmpty ? data.first['code'] as String : null;
+      groups = list;
+      _selectedGroup = list.isNotEmpty ? list.first['code'] as String : null;
     });
     await _loadMessages();
   }
 
   Future<void> _loadMessages() async {
-    if (_selectedGroup == null) {
+    if (_selectedGroup == null || !groups.any((g) => g['code'] == _selectedGroup)) {
       setState(() {
         messages = [];
         loading = false;
