@@ -49,7 +49,7 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Resumen',
+                          Text('Resumen',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 17, color: AppColors.primary)),
                           const SizedBox(height: 6),

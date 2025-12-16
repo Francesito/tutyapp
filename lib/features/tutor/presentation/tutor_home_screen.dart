@@ -93,7 +93,7 @@ class TutorHomeScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontSize: 17, fontWeight: FontWeight.bold, color: AppColors.primary)),
                 const SizedBox(height: 4),
                 Text(subtitle),
