@@ -27,6 +27,7 @@ class TutorTrackApp extends ConsumerWidget {
     final router = _buildRouter(ref);
     return MaterialApp.router(
       title: 'Tuty',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: AppColors.primary,

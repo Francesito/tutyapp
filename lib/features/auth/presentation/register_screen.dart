@@ -30,6 +30,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 460),
           child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            elevation: 6,
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(

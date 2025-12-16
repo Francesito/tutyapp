@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import '../../../core/constants.dart';
 import '../../../core/models.dart';
 import '../../../data/api_client.dart';
 
@@ -47,5 +51,24 @@ class StudentRepository {
     return (res['items'] as List<dynamic>)
         .map((e) => JustificationRequest.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<String> uploadEvidence(File file) async {
+    final uri = Uri.parse('$apiBaseUrl/uploads/justification-image');
+    final request = http.MultipartRequest('POST', uri);
+    if (_api is ApiClient) {
+      final tokenField = (_api as dynamic)._token;
+      if (tokenField != null) {
+        request.headers['Authorization'] = 'Bearer $tokenField';
+      }
+    }
+    request.files.add(await http.MultipartFile.fromPath('file', file.path));
+    final streamed = await request.send();
+    final res = await http.Response.fromStream(streamed);
+    if (res.statusCode >= 400) {
+      throw Exception('Error subiendo evidencia: ${res.body}');
+    }
+    final body = jsonDecode(res.body) as Map<String, dynamic>;
+    return body['url'] as String;
   }
 }

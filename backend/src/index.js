@@ -6,6 +6,7 @@ import { authRouter } from './routes/auth.js';
 import { groupRouter } from './routes/groups.js';
 import { studentRouter } from './routes/students.js';
 import { tutorRouter } from './routes/tutors.js';
+import { uploadRouter } from './routes/uploads.js';
 
 dotenv.config();
 
@@ -13,12 +14,14 @@ const app = express();
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json());
 app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads'));
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
 app.use('/auth', authRouter);
 app.use('/groups', groupRouter);
 app.use('/students', studentRouter);
 app.use('/tutor', tutorRouter);
+app.use('/uploads', uploadRouter);
 
 // basic error handler
 app.use((err, req, res, _next) => {

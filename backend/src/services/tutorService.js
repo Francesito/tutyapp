@@ -3,7 +3,7 @@ import { pool } from '../config/db.js';
 export async function fetchAlerts(tutorId) {
   const [rows] = await pool.query(
     `SELECT a.id, a.type, a.message FROM alerts a
-     JOIN groups g ON a.group_id = g.id
+     JOIN \`groups\` g ON a.group_id = g.id
      WHERE g.tutor_id = ? ORDER BY a.created_at DESC LIMIT 50`,
     [tutorId]
   );

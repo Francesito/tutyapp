@@ -34,79 +34,93 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
           )
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Hola, ${session?.name ?? session?.email ?? ''}',
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 12),
-                  const Text('Código de grupo'),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _codeController,
-                          decoration: const InputDecoration(
-                            hintText: 'SP01SV-24',
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFF4F7FF), Color(0xFFE8F0FF)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            Card(
+              color: AppColors.card,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Hola, ${session?.name ?? session?.email ?? ''}',
+                        style: const TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 12),
+                    const Text('Código de grupo'),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _codeController,
+                            decoration: const InputDecoration(
+                              hintText: 'SP01SV-24',
+                              filled: true,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      FilledButton(
-                        onPressed: _joinGroup,
-                        child: const Text('Unirse'),
-                      ),
-                    ],
-                  ),
-                  if (_status.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8),
-                      child: Text(_status),
-                    )
-                ],
+                        const SizedBox(width: 8),
+                        FilledButton(
+                          onPressed: _joinGroup,
+                          child: const Text('Unirse'),
+                        ),
+                      ],
+                    ),
+                    if (_status.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(_status),
+                      )
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _FeatureCard(
-                title: 'Ánimo diario',
-                icon: Icons.emoji_emotions,
-                onTap: () => context.go('/home/mood'),
-              ),
-              _FeatureCard(
-                title: 'Percepciones',
-                icon: Icons.school,
-                onTap: () => context.go('/home/perception'),
-              ),
-              _FeatureCard(
-                title: 'Justificantes',
-                icon: Icons.description,
-                onTap: () => context.go('/home/justifications'),
-              ),
-              _FeatureCard(
-                title: 'Historial',
-                icon: Icons.history,
-                onTap: () => context.go('/home/history'),
-              ),
-              _FeatureCard(
-                title: 'Mensajes',
-                icon: Icons.chat,
-                onTap: () => context.go('/home/chat'),
-              ),
-            ],
-          )
-        ],
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                _FeatureCard(
+                  title: 'Ánimo diario',
+                  icon: Icons.emoji_emotions,
+                  onTap: () => context.go('/home/mood'),
+                ),
+                _FeatureCard(
+                  title: 'Percepciones',
+                  icon: Icons.school,
+                  onTap: () => context.go('/home/perception'),
+                ),
+                _FeatureCard(
+                  title: 'Justificantes',
+                  icon: Icons.description,
+                  onTap: () => context.go('/home/justifications'),
+                ),
+                _FeatureCard(
+                  title: 'Historial',
+                  icon: Icons.history,
+                  onTap: () => context.go('/home/history'),
+                ),
+                _FeatureCard(
+                  title: 'Mensajes',
+                  icon: Icons.chat,
+                  onTap: () => context.go('/home/chat'),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
