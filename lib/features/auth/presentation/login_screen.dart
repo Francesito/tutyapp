@@ -87,7 +87,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         if (mounted) context.go('/home');
       }
     } catch (e) {
-      setState(() => _error = 'Credenciales inválidas o error de red');
+      setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
     } finally {
       if (mounted) setState(() => _loading = false);
     }

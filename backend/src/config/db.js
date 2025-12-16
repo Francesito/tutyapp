@@ -1,6 +1,5 @@
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
-import { parse } from 'url';
 
 dotenv.config();
 
@@ -10,18 +9,20 @@ function createPool() {
   if (!databaseUrl) {
     throw new Error('DATABASE_URL is required');
   }
-  const parsed = parse(databaseUrl);
-  const [user, password] = (parsed.auth || '').split(':');
-  const db = (parsed.path || '').replace('/', '');
+
+  const url = new URL(databaseUrl);
+  const useSsl =
+    process.env.DB_SSL === 'true' ||
+    url.searchParams.get('ssl-mode')?.toLowerCase() === 'required';
 
   return mysql.createPool({
-    host: parsed.hostname,
-    port: parsed.port ? Number(parsed.port) : 3306,
-    user,
-    password,
-    database: db,
+    host: url.hostname,
+    port: url.port ? Number(url.port) : 3306,
+    user: decodeURIComponent(url.username),
+    password: decodeURIComponent(url.password),
+    database: url.pathname.replace('/', ''),
     waitForConnections: true,
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
+    ssl: useSsl ? { rejectUnauthorized: false } : undefined,
     connectionLimit: 10,
   });
 }

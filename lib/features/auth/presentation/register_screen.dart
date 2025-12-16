@@ -113,7 +113,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         if (mounted) context.go('/home');
       }
     } catch (e) {
-      setState(() => _error = 'No se pudo registrar');
+      setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
     } finally {
       if (mounted) setState(() => _loading = false);
     }

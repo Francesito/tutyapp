@@ -8,7 +8,7 @@ class AppColors {
 }
 
 class AppText {
-  static const appName = 'TutorTrack';
+  static const appName = 'Tuty';
 }
 
 class MoodOptions {
