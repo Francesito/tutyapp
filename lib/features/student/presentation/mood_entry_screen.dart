@@ -21,41 +21,55 @@ class _MoodEntryScreenState extends ConsumerState<MoodEntryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Registro diario de ánimo')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(
-              spacing: 8,
-              children: MoodOptions.emojis
-                  .map(
-                    (emoji) => ChoiceChip(
-                      label: Text(emoji, style: const TextStyle(fontSize: 20)),
-                      selected: _selected == emoji,
-                      onSelected: (_) => setState(() => _selected = emoji),
-                    ),
-                  )
-                  .toList(),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _note,
-              decoration: const InputDecoration(
-                labelText: 'Nota opcional',
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFF4F7FF), Color(0xFFE8F0FF)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Selecciona tu ánimo de hoy',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 10,
+                children: MoodOptions.emojis
+                    .map(
+                      (emoji) => ChoiceChip(
+                        label: Text(emoji, style: const TextStyle(fontSize: 20)),
+                        selected: _selected == emoji,
+                        onSelected: (_) => setState(() => _selected = emoji),
+                      ),
+                    )
+                    .toList(),
               ),
-            ),
-            const SizedBox(height: 12),
-            FilledButton(
-              onPressed: _selected == null ? null : _submit,
-              child: const Text('Registrar'),
-            ),
-            if (_status.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(_status),
-              )
-          ],
+              const SizedBox(height: 16),
+              TextField(
+                controller: _note,
+                decoration: const InputDecoration(
+                  labelText: 'Nota opcional',
+                  filled: true,
+                ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: _selected == null ? null : _submit,
+                icon: const Icon(Icons.check_circle_outline),
+                label: const Text('Registrar'),
+              ),
+              if (_status.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(_status),
+                )
+            ],
+          ),
         ),
       ),
     );

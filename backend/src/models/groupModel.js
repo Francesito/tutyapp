@@ -2,14 +2,14 @@ import { pool } from '../config/db.js';
 
 export async function createGroup({ code, term, tutorId }) {
   const [result] = await pool.query(
-    'INSERT INTO groups (code, term, tutor_id) VALUES (?, ?, ?)',
+    'INSERT INTO `groups` (code, term, tutor_id) VALUES (?, ?, ?)',
     [code, term, tutorId]
   );
   return result.insertId;
 }
 
 export async function findGroupByCode(code) {
-  const [rows] = await pool.query('SELECT * FROM groups WHERE code = ?', [code]);
+  const [rows] = await pool.query('SELECT * FROM `groups` WHERE code = ?', [code]);
   return rows[0];
 }
 
@@ -22,7 +22,7 @@ export async function addStudentToGroup({ studentId, groupId }) {
 
 export async function studentGroupForTerm(studentId, term) {
   let sql =
-    'SELECT g.* FROM group_members gm JOIN groups g ON gm.group_id = g.id WHERE gm.student_id = ?';
+    'SELECT g.* FROM group_members gm JOIN `groups` g ON gm.group_id = g.id WHERE gm.student_id = ?';
   const params = [studentId];
   if (term) {
     sql += ' AND g.term = ?';

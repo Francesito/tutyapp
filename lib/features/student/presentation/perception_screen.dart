@@ -21,37 +21,50 @@ class _PerceptionScreenState extends ConsumerState<PerceptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Percepción semanal')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _subject,
-              decoration: const InputDecoration(labelText: 'Asignatura'),
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              children: PerceptionOptions.options
-                  .map((option) => ChoiceChip(
-                        label: Text(option),
-                        selected: _perception == option,
-                        onSelected: (_) => setState(() => _perception = option),
-                      ))
-                  .toList(),
-            ),
-            const SizedBox(height: 12),
-            FilledButton(
-              onPressed: _perception == null ? null : _submit,
-              child: const Text('Guardar percepción'),
-            ),
-            if (_status.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(_status),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFF4F7FF), Color(0xFFE8F0FF)],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Percepción por asignatura',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _subject,
+                decoration: const InputDecoration(labelText: 'Asignatura', filled: true),
               ),
-          ],
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 10,
+                children: PerceptionOptions.options
+                    .map((option) => ChoiceChip(
+                          label: Text(option),
+                          selected: _perception == option,
+                          onSelected: (_) => setState(() => _perception = option),
+                        ))
+                    .toList(),
+              ),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: _perception == null ? null : _submit,
+                icon: const Icon(Icons.save_alt),
+                label: const Text('Guardar percepción'),
+              ),
+              if (_status.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(_status),
+                ),
+            ],
+          ),
         ),
       ),
     );
