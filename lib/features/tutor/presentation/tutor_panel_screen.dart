@@ -32,7 +32,7 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0D47A1), Color(0xFF42A5F5)],
+            colors: [Color(0xFFFDF0D5), Color(0xFFE3F2FD)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -43,7 +43,7 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
                 padding: const EdgeInsets.all(16),
                 children: [
                   Card(
-                    color: Colors.white,
+                    color: const Color(0xFFFFF8E1),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     elevation: 8,
                     child: Padding(
@@ -63,7 +63,7 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
                   ),
                   const SizedBox(height: 10),
                   Card(
-                    color: Colors.white,
+                    color: const Color(0xFFE3F2FD),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     elevation: 8,
                     child: Padding(
@@ -82,7 +82,7 @@ class _TutorPanelScreenState extends ConsumerState<TutorPanelScreen> {
                   ),
                   const SizedBox(height: 10),
                   const Text('Alertas automáticas',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87)),
                   ...alerts.map((a) => Card(
                         color: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

@@ -26,7 +26,7 @@ class TutorHomeScreen extends ConsumerWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0D47A1), Color(0xFF82B1FF)],
+            colors: [Color(0xFFFDF0D5), Color(0xFFE3F2FD)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -39,34 +39,39 @@ class TutorHomeScreen extends ConsumerWidget {
             children: [
               _card(
                 context,
-                title: 'Panel',
+                title: 'Panel 📊',
                 subtitle: 'Ánimo, alertas y resumen',
                 onTap: () => context.go('/tutor/panel'),
+                color: const Color(0xFFFFD54F),
               ),
               _card(
                 context,
-                title: 'Crear grupo',
+                title: 'Crear grupo ✨',
                 subtitle: 'Código único por cuatrimestre',
                 onTap: () => context.go('/tutor/groups/create'),
+                color: const Color(0xFF80DEEA),
               ),
               _card(
                 context,
-                title: 'Justificantes',
+                title: 'Justificantes 📝',
                 subtitle: 'Aprobar / rechazar',
                 onTap: () => context.go('/tutor/justifications'),
+                color: const Color(0xFFA5D6A7),
               ),
               _card(
                 context,
-                title: 'Reportes',
+                title: 'Reportes 📂',
                 subtitle: 'Exportar PDF/Excel',
                 onTap: () => context.go('/tutor/reports'),
+                color: const Color(0xFFCE93D8),
               ),
               if (session != null)
                 _card(
                   context,
-                  title: 'Perfil',
+                  title: 'Perfil 👤',
                   subtitle: session.email,
                   onTap: () {},
+                  color: const Color(0xFF90CAF9),
                 )
             ],
           ),
@@ -78,27 +83,32 @@ class TutorHomeScreen extends ConsumerWidget {
   Widget _card(BuildContext context,
       {required String title,
       required String subtitle,
-      required VoidCallback onTap}) {
+      required VoidCallback onTap,
+      required Color color}) {
     return SizedBox(
       width: 200,
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: 8,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.bold, color: AppColors.primary)),
-                const SizedBox(height: 4),
-                Text(subtitle),
-              ],
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        child: Card(
+          color: color,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 8,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.bold, color: Colors.black87)),
+                  const SizedBox(height: 4),
+                  Text(subtitle),
+                ],
+              ),
             ),
           ),
         ),
